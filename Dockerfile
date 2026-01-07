@@ -2,7 +2,7 @@ FROM alpine:latest
 
 ARG USER=app
 
-RUN apk add --no-cache --update uv bash \
+RUN apk add --no-cache --update uv libraqm bash \
     && rm -rf ~/.cache/* /usr/local/share/man /tmp/*
 
 RUN adduser -D "${USER}"
