@@ -11,10 +11,8 @@ from typing import TYPE_CHECKING
 
 from aiocron import crontab  # type: ignore[import-untyped]
 from dotenv import load_dotenv
-from telegram import MessageEntity, Update
-from telegram.constants import ParseMode
+from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler
-from telegram.helpers import escape_markdown
 
 from .imglib import generate_image
 from .utils import LogLevel
@@ -64,16 +62,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def handle_error(update: object | None, context: ContextTypes.DEFAULT_TYPE) -> None:
     error = context.error
     LOGGER.error("Exception while handling update: %s", update, exc_info=error)
-    if isinstance(update, Update):
-        message = update.effective_message
-        if message is not None:
-            err_msg = (
-                "_An unknown error occurred._"
-                if error is None
-                else "_An error occurred:_\n\n"
-                f"`{escape_markdown(str(error), version=2, entity_type=MessageEntity.CODE)}`"
-            )
-            await message.reply_text(err_msg, parse_mode=ParseMode.MARKDOWN_V2, do_quote=True)
 
 
 def main() -> None:
