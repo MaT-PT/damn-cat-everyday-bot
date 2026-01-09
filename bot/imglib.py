@@ -61,14 +61,14 @@ def generate_image(date: datetime | None = None) -> Image.Image:
         output: Image.Image = Image.open("img/dognose.png")
         output.load()
         img_width, img_height = output.size
-        text1 = "Woah it's {} already?"
-        text2 = "{}? Can't wait!"
+        text1 = "Woah it’s {} already?"
+        text2 = "{}? Can’t wait!"
         position1 = (img_width / 2, img_height * 0.17)
         position2 = (img_width / 2, img_height * 0.85)
     else:
         output = airplane_cat.copy()
         img_width, img_height = output.size
-        text1 = "Damn it's {} already?"
+        text1 = "Damn it’s {} already?"
         text2 = "{}? Fuck everything"
         position1 = (img_width / 2, img_height * 0.22)
         position2 = (img_width / 2, img_height * 0.75)
@@ -81,7 +81,7 @@ def generate_image(date: datetime | None = None) -> Image.Image:
         ),
         TextBox(
             text=[
-                "What's next?",
+                "What’s next?",
                 text2.format(format_date(tomorrow)),
             ],
             position=position2,
