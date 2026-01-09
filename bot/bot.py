@@ -20,6 +20,7 @@ from .utils import LogLevel
 if TYPE_CHECKING:
     from telegram.ext._utils.types import BD, BT, CCT, CD, JQ, UD
 
+
 TARGET_CHANNEL = "@DamnCatEveryDay"
 
 load_dotenv()

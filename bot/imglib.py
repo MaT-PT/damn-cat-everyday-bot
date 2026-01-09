@@ -6,17 +6,17 @@ from typing import TYPE_CHECKING
 
 from PIL import Image, ImageDraw, ImageFont
 
-from .utils import format_day
+from .utils import format_date
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+
 
 TEMPLATE_FILE = "img/airplane-cat_50.png"
 FONT_FILE = "img/NotoSans_SemiCondensed-Bold.ttf"
 
 airplane_cat = Image.open(TEMPLATE_FILE)
 airplane_cat.load()
-img_width, img_height = airplane_cat.size
 
 font = ImageFont.truetype(FONT_FILE, 96)
 
@@ -56,19 +56,35 @@ def generate_image(date: datetime | None = None) -> Image.Image:
     if date is None:
         date = datetime.now(UTC)
     tomorrow = date + timedelta(days=1)
-    output = airplane_cat.copy()
+
+    if date.month == 4 and date.day == 1:  # April Fools' Day
+        output: Image.Image = Image.open("img/dognose.png")
+        output.load()
+        img_width, img_height = output.size
+        text1 = "Woah it's {} already?"
+        text2 = "{}? Can't wait!"
+        position1 = (img_width / 2, img_height * 0.17)
+        position2 = (img_width / 2, img_height * 0.85)
+    else:
+        output = airplane_cat.copy()
+        img_width, img_height = output.size
+        text1 = "Damn it's {} already?"
+        text2 = "{}? Fuck everything"
+        position1 = (img_width / 2, img_height * 0.22)
+        position2 = (img_width / 2, img_height * 0.75)
+
     draw = ImageDraw.Draw(output)
     textboxes = [
         TextBox(
-            text=f"Damn it's {date.strftime('%B')} {format_day(date.day)} already?",
-            position=(img_width / 2, img_height * 0.22),
+            text=text1.format(format_date(date)),
+            position=position1,
         ),
         TextBox(
             text=[
                 "What's next?",
-                f"{tomorrow.strftime('%B')} {format_day(tomorrow.day)}? Fuck everything",
+                text2.format(format_date(tomorrow)),
             ],
-            position=(img_width / 2, img_height * 0.75),
+            position=position2,
         ),
     ]
     for textbox in textboxes:
@@ -77,21 +93,8 @@ def generate_image(date: datetime | None = None) -> Image.Image:
 
 
 if __name__ == "__main__":
-    output = airplane_cat.copy()
-    draw = ImageDraw.Draw(output)
-    textboxes = [
-        TextBox(
-            text="Damn it's today already?",
-            position=(img_width / 2, img_height * 0.22),
-        ),
-        TextBox(
-            text=[
-                "What's next?",
-                "Tomorrow? Fuck everything",
-            ],
-            position=(img_width / 2, img_height * 0.75),
-        ),
-    ]
-    for textbox in textboxes:
-        textbox.draw(draw)
-    output.save("output.png")
+    date = datetime.now(UTC)
+    output = generate_image()
+    output.save("output_today.png")
+    output = generate_image(date.replace(month=4, day=1))
+    output.save("output_april_1st.png")

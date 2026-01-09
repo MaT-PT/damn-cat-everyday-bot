@@ -1,4 +1,10 @@
+from __future__ import annotations
+
 from enum import StrEnum
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class LogLevel(StrEnum):
@@ -25,3 +31,7 @@ def day_suffix(day: int) -> str:
 
 def format_day(day: int) -> str:
     return f"{day}{day_suffix(day)}"
+
+
+def format_date(date: datetime) -> str:
+    return f"{date.strftime('%B')} {format_day(date.day)}"
