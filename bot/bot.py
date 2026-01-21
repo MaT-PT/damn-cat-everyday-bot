@@ -119,7 +119,7 @@ def main() -> None:
 
     app.add_handler(MessageHandler(None, print_msg, block=False))
 
-    @crontab("0 8 * * *", tz=UTC)  # At 08:00 AM every day
+    @crontab("0 8 * * *", tz=UTC)  # type: ignore[untyped-decorator]  # At 08:00 AM UTC every day
     async def daily_post_task() -> None:
         chat = await app.bot.get_chat(target_channel)
         LOGGER.info("Generating daily image...")
